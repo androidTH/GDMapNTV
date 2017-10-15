@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.amap.api.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <CheckBox
+        android:id="@+id/check_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="开启个性化地图"/>
+
+    <LinearLayout
+        android:id="@+id/linear_maptype"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/basicmap"
+            android:layout_width="65dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:background="@drawable/btn_map_poi"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:text="标准地图"/>
+        <Button
+            android:id="@+id/rsmap"
+            android:layout_width="65dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:background="@drawable/btn_map_poi"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:text="卫星地图"/>
+        <Button
+            android:id="@+id/nightmap"
+            android:layout_width="65dp"
+            android:layout_height="32dp"
+            android:background="@drawable/btn_map_poi"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="夜间模式"/>
+        <Button
+            android:id="@+id/navimap"
+            android:layout_width="65dp"
+            android:layout_height="32dp"
+            android:background="@drawable/btn_map_poi"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="导航模式"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linear_maptype"
+        android:background="#D999"
+        android:minWidth="130dip"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="6dp" >
+
+
+        <CheckBox
+            android:id="@+id/traffic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="交通路线" />
+
+        <CheckBox
+            android:id="@+id/building"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="3D楼宇" />
+
+        <CheckBox
+            android:id="@+id/maptext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="文字" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/linear_mode"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/Lujiazui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="陆家嘴" />
+
+        <Button
+            android:id="@+id/Zhongguancun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="杭州" />
+    </LinearLayout>
+</RelativeLayout>

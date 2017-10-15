@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="zoomin_view" type="id" />
+    <item name="zoomout_view" type="id" />
+</resources>

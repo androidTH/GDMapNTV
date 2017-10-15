@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.gdmap.newscctv">
+
+    <!-- 允许程序打开网络套接字 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 允许程序读写手机状态和身份 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_MOCK_LOCATION"
+        tools:ignore="MockLocation" />
+
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:name=".MapApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="5cfcee463f6a2d23214e9b9f3b1fc175" />
+
+        <activity
+            android:name=".LaunchActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MapLocationActivity" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".GeoFence_Round_Activity" />
+        <activity android:name=".GeoFence_Polygon_Activity" />
+        <activity
+            android:name=".LastLocation_Activity"
+            android:label="@string/title_activity_last_location_"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".GeoFence_District_Activity" />
+        <activity
+            android:name=".BasicMapActivity"
+            android:label="@string/title_activity_basic_map"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".MarkerClickActivity" />
+        <activity
+            android:name=".CustomMarkerActivity"
+            android:label="@string/title_activity_custom_marker"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".LimitBoundsActivity" />
+        <activity android:name=".ClusterActivity" />
+        <activity android:name=".PoiKeywordSearchActivity" />
+        <activity android:name=".PoiAroundSearchActivity" />
+        <activity android:name=".PoiIDSearchActivity" />
+        <activity android:name=".ReGeocoderActivity" />
+        <activity android:name=".WalkRouteActivity" />
+        <activity android:name=".CheckInActivity" />
+        <activity android:name=".GeoFencesActivity"></activity>
+    </application>
+
+</manifest>

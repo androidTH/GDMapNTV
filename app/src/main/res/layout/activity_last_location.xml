@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.gdmap.newscctv.LastLocation_Activity"
+    tools:showIn="@layout/activity_last_location">
+    <Button
+        android:id="@+id/bt_lastLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="最后一次定位" />
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/bt_lastLoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"/>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
