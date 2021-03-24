@@ -185,7 +185,6 @@ public class GeoFence_District_Activity extends CheckPermissionsActivity impleme
        }
     }
 
-
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
          if(this.listener != null && aMapLocation != null){

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMapOptions;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.TextureMapView;
@@ -26,7 +27,9 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.NaviPara;
 import com.amap.api.maps.model.Poi;
+import com.amap.api.services.geocoder.GeocodeQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeResult;
@@ -45,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-//23:10:8F:E6:99:1B:67:E3:2A:49:E9:34:FF:09:46:46:B7:A4:85:B5
+//34:FF:B9:7B:11:D0:19:9D:46:85:35:8B:E5:2D:34:CC:4B:5B:07:ED
 //A8:64:C9:80:3E:22:76:8C:71:C9:49:8A:BE:58:14:CD:8C:01:7E:5E
 //Android开发——高德地图波纹扩散效果动效及自定义缩放、定位控件 https://github.com/wenzhihao123/AMapCircleWave
 //快速实现自定义地图聚合操作 http://blog.csdn.net/qq_23547831/article/details/52063010
@@ -53,7 +56,6 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
         GeocodeSearch.OnGeocodeSearchListener, AMap.OnMyLocationChangeListener, AMap.OnCameraChangeListener,
         ZoomView.OnChangeCamera, CompoundButton.OnCheckedChangeListener, AMap.OnMapClickListener,
         AMap.OnPOIClickListener, AMap.OnMarkerClickListener, RouteSearch.OnRouteSearchListener {
-
 
     @BindView(R.id.tturemapview)
     public TextureMapView mMapView;
@@ -78,7 +80,6 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
     private MarkerOptions mEndmarkerOptions;
     private LatLng mLoclatlng;
 
-
     private LocationHandler mLocationHandler = new LocationHandler(this);
 
     public static int LOCATION_NUM = 0;
@@ -93,7 +94,6 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
         mScaleToggle.setOnCheckedChangeListener(this);
         if (mMapView != null) {
             mMapView.onCreate(savedInstanceState);
-
         }
         initMap();
     }
@@ -123,11 +123,11 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
         mLocationStyle = new MyLocationStyle();
         mLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER LOCATION_TYPE_LOCATE
         mLocationStyle.showMyLocation(true);
-        mLocationStyle.interval(3000);
+        mLocationStyle.interval(1);//设置发起定位请求的时间间隔，单位：毫秒，默认值：1000毫秒，如果传小于1000的任何值将执行单次定位。
         mLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.gps_point));
         mLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
         // 自定义精度范围的圆形边框宽度
-        mLocationStyle.strokeWidth(0);
+        mLocationStyle.strokeWidth(1);
         // 设置圆形的填充颜色
         mLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         mAMapControl.setMyLocationStyle(mLocationStyle);
@@ -141,8 +141,10 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
         mAMapControl.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
             @Override
             public void onMapLoaded() {
+
             }
         });
+
     }
 
 
@@ -198,6 +200,8 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
 //        });
 //        aMap.moveCamera(update); //无动画的时候调用
 //    }
+
+
     @Override
     public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
         if (i == 1000) {
@@ -218,13 +222,15 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
 //        mGeocodeSearch.getFromLocationAsyn(query);
         mLoclatlng = new LatLng(location.getLatitude(), location.getLongitude());
         //实现第一次的时候定位移到屏幕中间,以后就不再移动屏幕中间
-        mMapView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
-                mAMapControl.setMyLocationStyle(mLocationStyle);
-            }
-        }, 500);
+        if(mMapView != null){
+            mMapView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
+                    mAMapControl.setMyLocationStyle(mLocationStyle);
+                }
+            }, 500);
+        }
 //        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(latlng,16, 30, 30)));
     }
 
@@ -315,7 +321,7 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
     @Override
     public void onPOIClick(Poi poi) {
         mAMapControl.clear();
-        MarkerOptions markerOptions = new MarkerOptions().draggable(true);
+        MarkerOptions markerOptions = new MarkerOptions().draggable(false);
         markerOptions.position(poi.getCoordinate());
         TextView mTv = new TextView(getApplicationContext());
         mTv.setText("到" + poi.getName() + "去");
@@ -328,17 +334,17 @@ public class MapLocationActivity extends CheckPermissionsActivity implements Vie
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-//        NaviPara naviPara = new NaviPara();
-//        naviPara.setTargetPoint(marker.getPosition());
-//        naviPara.setNaviStyle(AMapUtils.DRIVING_AVOID_CONGESTION);
-//        try {
-//            // 调起高德地图导航
-//            AMapUtils.openAMapNavi(naviPara, getApplicationContext());
-//        } catch (com.amap.api.maps.AMapException e) {
-//            // 如果没安装会进入异常，调起下载页面
-//            AMapUtils.getLatestAMapApp(getApplicationContext());
-//        }
-//        mAMapControl.clear();
+        NaviPara naviPara = new NaviPara();
+        naviPara.setTargetPoint(marker.getPosition());
+        naviPara.setNaviStyle(AMapUtils.DRIVING_AVOID_CONGESTION);
+        try {
+            // 调起高德地图导航
+            AMapUtils.openAMapNavi(naviPara, getApplicationContext());
+        } catch (com.amap.api.maps.AMapException e) {
+            // 如果没安装会进入异常，调起下载页面
+            AMapUtils.getLatestAMapApp(getApplicationContext());
+        }
+        mAMapControl.clear();
 
         return true;
     }

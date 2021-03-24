@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.provider.SyncStateContract;
+import android.util.Log;
 import android.util.LruCache;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -20,6 +22,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.VisibleRegion;
 import com.amap.api.maps.model.animation.AlphaAnimation;
 import com.gdmap.newscctv.model.Cluster;
 import com.gdmap.newscctv.model.ClusterClickListener;
@@ -88,9 +91,9 @@ public class ClusterOverlay implements AMap.OnCameraChangeListener, AMap.OnMarke
                 oldValue.recycle();
             }
         };
-        this.mPXInMeters = aMap.getScalePerPixel();
+        this.mPXInMeters = aMap.getScalePerPixel();//获取当前缩放级别下，地图上1像素点对应的长度，单位米
         this.mClusterDistance = this.mPXInMeters * this.mClusterSize;
-        aMap.setOnMarkerClickListener(this);
+        aMap.setOnMarkerClickListener(this);//onMarker的点击时间
         aMap.setOnCameraChangeListener(this);
         initThreadHandler();
         assignClusters();
@@ -249,6 +252,7 @@ public class ClusterOverlay implements AMap.OnCameraChangeListener, AMap.OnMarke
      *
      * @param cluster
      */
+    int i = 0;
     private void addSingleClusterToMap(Cluster cluster) {
         MarkerOptions options = new MarkerOptions();
         options.position(cluster.getCenterLatLng());
@@ -261,6 +265,10 @@ public class ClusterOverlay implements AMap.OnCameraChangeListener, AMap.OnMarke
         marker.startAnimation();
         cluster.setMarker(marker);
         mAddMarkers.add(marker);
+        if( i == 0){
+            marker.showInfoWindow();
+        }
+        i++;
     }
 
     /**
@@ -304,9 +312,7 @@ public class ClusterOverlay implements AMap.OnCameraChangeListener, AMap.OnMarke
             }
         }
         return null;
-    }
-
-    ;
+    };
 
     private Handler.Callback MarkerCallback = new Handler.Callback() {
 
@@ -314,6 +320,7 @@ public class ClusterOverlay implements AMap.OnCameraChangeListener, AMap.OnMarke
         public boolean handleMessage(Message message) {
             switch (message.what) {
                 case ADD_CLUSTER_LIST:
+                    Log.i("MarkerCallback", Thread.currentThread().getName() + "线程名字");
                     List<Cluster> clusters = (List<Cluster>) message.obj;
                     addClusterToMap(clusters);
                     break;
@@ -358,6 +365,15 @@ public class ClusterOverlay implements AMap.OnCameraChangeListener, AMap.OnMarke
         mPXInMeters = aMap.getScalePerPixel();
         mClusterDistance = mPXInMeters * mClusterSize;
         assignClusters();
+        VisibleRegion visibleRegion = aMap.getProjection().getVisibleRegion();//获取可视区域
+        LatLngBounds latLngBounds = visibleRegion.latLngBounds;
+        boolean isContain = latLngBounds.contains(Const.BEIJING);// 判断上海经纬度是否包括在当前地图可见区域
+        if (isContain) {
+            ToastUtil.show(mContext, "北京市在地图当前可见区域内");
+        } else {
+            ToastUtil.show(mContext, "北京市市超出地图当前可见区域");
+        }
+
     }
 
 

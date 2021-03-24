@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.amap.api.fence.GeoFenceListener;
+import com.meituan.android.walle.WalleChannelReader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,37 +50,37 @@ public class LaunchActivity extends AppCompatActivity {
     Button mapwalkroute;
     @BindView(R.id.mapcheckin)
     Button mapcheckin;
-
+    @BindView(R.id.maplocationcheckin)
+    Button maplocationcheckin;
+    @BindView(R.id.mapplacechoose)
+    Button mapplacechoose;
+    @BindView(R.id.searchplace)
+    Button mapsearchplace;
+    @BindView(R.id.province)
+    Button mProvince;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
-
-        mLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LaunchActivity.this, LocationActivity.class);
-                startActivity(intent);
-            }
+//        String channel = WalleChannelReader.getChannel(this.getApplicationContext());
+//        ToastUtil.show(this,"渠道" + channel);
+        mLocation.setOnClickListener(view -> {
+            Intent intent = new Intent(LaunchActivity.this, LocationActivity.class);
+            startActivity(intent);
         });
-        mMapLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LaunchActivity.this, MapLocationActivity.class);
-                startActivity(intent);
-            }
-        });
-        mBtnGeoFence.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LaunchActivity.this, GeoFence_Polygon_Activity.class);
-                startActivity(intent);
-            }
+        mMapLocation.setOnClickListener(view -> {
+            Intent intent = new Intent(LaunchActivity.this, MapLocationActivity.class);
+            startActivity(intent);
         });
 
-        mapLastLoc.setOnClickListener(new View.OnClickListener() {
+        mBtnGeoFence.setOnClickListener(view -> {
+            Intent intent = new Intent(LaunchActivity.this, GeoFence_Polygon_Activity.class);
+            startActivity(intent);
+        });
+
+        mapLastLoc.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, LastLocation_Activity.class);
@@ -85,7 +88,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapKeyWord.setOnClickListener(new View.OnClickListener() {
+        mapKeyWord.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, GeoFence_District_Activity.class);
@@ -93,7 +96,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapMode.setOnClickListener(new View.OnClickListener() {
+        mapMode.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, BasicMapActivity.class);
@@ -101,7 +104,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapMaker.setOnClickListener(new View.OnClickListener() {
+        mapMaker.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, MarkerClickActivity.class);
@@ -109,7 +112,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapcustommaker.setOnClickListener(new View.OnClickListener() {
+        mapcustommaker.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, CustomMarkerActivity.class);
@@ -117,7 +120,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        maplimit.setOnClickListener(new View.OnClickListener() {
+        maplimit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, LimitBoundsActivity.class);
@@ -125,7 +128,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapmapgeodesic.setOnClickListener(new View.OnClickListener() {
+        mapmapgeodesic.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, GeodesicActivity.class);
@@ -133,7 +136,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapgecluster.setOnClickListener(new View.OnClickListener() {
+        mapgecluster.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, ClusterActivity.class);
@@ -141,7 +144,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapgepoikeyword.setOnClickListener(new View.OnClickListener() {
+        mapgepoikeyword.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, PoiKeywordSearchActivity.class);
@@ -149,7 +152,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapgepoiaround.setOnClickListener(new View.OnClickListener() {
+        mapgepoiaround.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, PoiAroundSearchActivity.class);
@@ -157,7 +160,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapgepoiId.setOnClickListener(new View.OnClickListener() {
+        mapgepoiId.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, PoiIDSearchActivity.class);
@@ -165,7 +168,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapgeregeocode.setOnClickListener(new View.OnClickListener() {
+        mapgeregeocode.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, ReGeocoderActivity.class);
@@ -173,7 +176,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapwalkroute.setOnClickListener(new View.OnClickListener() {
+        mapwalkroute.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, WalkRouteActivity.class);
@@ -181,12 +184,42 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
-        mapcheckin.setOnClickListener(new View.OnClickListener() {
+        mapcheckin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LaunchActivity.this, GeoFencesActivity.class);
                 startActivity(intent);
             }
+        });
+
+        maplocationcheckin.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LaunchActivity.this, LocationCheckIn.class);
+                startActivity(intent);
+            }
+        });
+
+        mapplacechoose.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LaunchActivity.this, PlaceChooseActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mapsearchplace.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LaunchActivity.this, SearchPlaceActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mProvince.setOnClickListener(v -> {
+            Intent intent = new Intent(LaunchActivity.this, ProvinceHoleActivity.class);
+//            Intent intent = new Intent(LaunchActivity.this, DistrictWithBoundaryActivity.class);
+            startActivity(intent);
         });
     }
 }

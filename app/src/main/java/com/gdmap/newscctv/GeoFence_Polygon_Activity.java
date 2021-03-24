@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.DPoint;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
@@ -42,6 +44,12 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolygonOptions;
+import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.route.DistanceItem;
+import com.amap.api.services.route.DistanceResult;
+import com.amap.api.services.route.DistanceSearch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,6 +120,11 @@ public class GeoFence_Polygon_Activity extends CheckPermissionsActivity implemen
             .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
     private List<LatLng> polygonPoints;
 
+    //测量距离
+    private DistanceSearch mDistanceSearch;
+    private DistanceSearch.DistanceQuery mDistanceQuery;
+
+    private float distance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +175,17 @@ public class GeoFence_Polygon_Activity extends CheckPermissionsActivity implemen
         mGeoFenceClient.setGeoFenceListener(this);
         mGeoFenceClient.setActivateAction(GeoFenceClient.GEOFENCE_IN);
         mAMapControl.setOnMapClickListener(this);
+
+//        mDistanceSearch = new DistanceSearch(this);
+//        mDistanceQuery = new DistanceSearch.DistanceQuery();
+//        mDistanceQuery.setType(DistanceSearch.TYPE_DRIVING_DISTANCE);
+//        mDistanceSearch.setDistanceSearchListener((distanceResult, i) -> {
+//            List<DistanceItem> list = distanceResult.getDistanceResults();
+//            for (int j=0;j<list.size();j++){
+//                distance = distance + list.get(j).getDistance();
+//            }
+//            tvGuide.setText(list.size()+"选中的坐标:"+distance+"米");
+//        });
     }
 
     private void resetView_polygon() {
@@ -263,10 +287,24 @@ public class GeoFence_Polygon_Activity extends CheckPermissionsActivity implemen
         polygonPoints.add(latLng);
         addCenterMarker(latLng);
         tvGuide.setBackgroundColor(getResources().getColor(R.color.gary));
-        tvGuide.setText("选中的坐标：度:" + latLng.longitude + ",经度:"
-                + latLng.latitude);
+//        tvGuide.setText("选中的坐标：度:" + latLng.longitude + ",经度:"
+//                + latLng.latitude);
         if(polygonPoints.size() >= 3 ){
             btAddFence.setEnabled(true);
+        }
+
+        if(polygonPoints.size()>=2){
+          Polyline mPolyline =  mAMapControl.addPolyline(new PolylineOptions().
+                    addAll(polygonPoints).width(30).color(ContextCompat.getColor(this,R.color.f850_default_blue)));
+
+//            LatLonPoint origins =new  LatLonPoint(polygonPoints.get(polygonPoints.size()-2).latitude,polygonPoints.get(polygonPoints.size()-2).longitude);
+//            LatLonPoint dest= new LatLonPoint(polygonPoints.get(polygonPoints.size()-1).latitude,polygonPoints.get(polygonPoints.size()-1).longitude);
+//            mDistanceQuery.addOrigins(origins);
+//            mDistanceQuery.setDestination(dest);
+//            mDistanceSearch.calculateRouteDistanceAsyn(mDistanceQuery);
+//设置测量方式，支持直线和驾车
+            distance = distance+AMapUtils.calculateLineDistance(polygonPoints.get(polygonPoints.size()-2), polygonPoints.get(polygonPoints.size()-1));
+            etCustomId.setText("选中的坐标:"+distance+"米");
         }
     }
 

@@ -96,5 +96,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="签到"/>
+        <Button
+            android:id="@+id/maplocationcheckin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="位置签到"/>
+        <Button
+            android:id="@+id/mapplacechoose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="位置选择"/>
+        <Button
+            android:id="@+id/searchplace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="搜索选择"/>
+        <Button
+            android:id="@+id/province"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="单个省份地图"/>
     </LinearLayout>
 </ScrollView>

@@ -3,6 +3,7 @@ package com.gdmap.newscctv.overlay;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.view.View;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -176,7 +177,6 @@ public class RouteOverlay {
 		if(marker != null) {
 			stationMarkers.add(marker);
 		}
-		
 	}
 
 	protected void addPolyLine(PolylineOptions options) {

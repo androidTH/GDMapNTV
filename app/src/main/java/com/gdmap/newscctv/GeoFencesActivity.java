@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amap.api.fence.GeoFenceListener;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -20,9 +19,10 @@ import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.SupportMapFragment;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 
-public class GeoFencesActivity extends AppCompatActivity implements LocationSource, AMapLocationListener{
+public class GeoFencesActivity extends AppCompatActivity implements AMap.OnMapLoadedListener,LocationSource, AMapLocationListener{
 
     private AMap aMap;
     private SupportMapFragment mapFragment;
@@ -45,20 +45,31 @@ public class GeoFencesActivity extends AppCompatActivity implements LocationSour
             aMap = mapFragment.getMap();
             UiSettings settings = aMap.getUiSettings();
             if(settings != null){
-                settings.setZoomControlsEnabled(false);
-                settings.setRotateGesturesEnabled(false);
-                settings.setMyLocationButtonEnabled(true);
+                settings.setZoomControlsEnabled(false);//缩放控件不可用
+                settings.setMyLocationButtonEnabled(false);//定位按钮不可用
+                settings.setTiltGesturesEnabled(false);//手势不可用
+                settings.setRotateGesturesEnabled(false);//选装手势不可用
+                aMap.setMaxZoomLevel(9.0f);//最大缩放等级
+                aMap.setMyLocationEnabled(true);//设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
             }
-            MyLocationStyle myLocationStyle = new MyLocationStyle();
-            myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.navi_map_gps_locked));
-            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0))
-                    .strokeColor(Color.argb(0, 0, 0, 0)).strokeWidth(1);
-            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//LOCATION_TYPE_LOCATE
+//            MyLocationStyle myLocationStyle = new MyLocationStyle();
+//            myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.navi_map_gps_locked));
+//            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0))
+//                    .strokeColor(Color.argb(0, 0, 0, 0)).strokeWidth(1);
+//            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//LOCATION_TYPE_LOCATE
+            aMap.setOnMapLoadedListener(this);
             aMap.setLocationSource(this);
-            aMap.setMyLocationStyle(myLocationStyle);
+//            aMap.setMyLocationStyle(myLocationStyle);
             aMap.setMyLocationEnabled(true);//设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-            aMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+            aMap.animateCamera(CameraUpdateFactory.zoomTo(5));
         }
+    }
+
+    public static final LatLng LATLNG_DEFAULT = new LatLng(20, 104.354167); // 默认经纬度
+
+    @Override
+    public void onMapLoaded() {
+        aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LATLNG_DEFAULT, 3.0f));
     }
 
     Handler handler = new Handler() {
@@ -88,7 +99,9 @@ public class GeoFencesActivity extends AppCompatActivity implements LocationSour
     public void onLocationChanged(AMapLocation aMapLocation) {
          if(aMapLocation != null && mOnLoctionChangeListener != null){
                if(aMapLocation != null && aMapLocation.getErrorCode() == 0){
-                    this.mOnLoctionChangeListener.onLocationChanged(aMapLocation);
+//                   this.mOnLoctionChangeListener.onLocationChanged(aMapLocation); 显示系统小蓝点
+                   Log.e("onLocationChanged", aMapLocation.getProvince());
+                   ToastUtil.show(GeoFencesActivity.this, aMapLocation.getProvince());
                }else{
                    String errText = "定位失败," + aMapLocation.getErrorCode() + ": "
                            + aMapLocation.getErrorInfo();

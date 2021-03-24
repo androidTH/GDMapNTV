@@ -1,6 +1,5 @@
 package com.gdmap.newscctv;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class LocationActivity extends CheckPermissionsActivity implements  AMapLocationListener{
+public class LocationActivity extends CheckPermissionsActivity implements AMapLocationListener{
 
 
     @BindView(R.id.btn_location)
@@ -25,7 +24,6 @@ public class LocationActivity extends CheckPermissionsActivity implements  AMapL
     @BindView(R.id.tv_locationinfo)
     public TextView mTvLocationInfo;
     private Unbinder unbinder;
-
 
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
@@ -142,6 +140,7 @@ public class LocationActivity extends CheckPermissionsActivity implements  AMapL
     private void startLoction(){
         // 启动定位
         locationClient.startLocation();
+
     }
 
     /**

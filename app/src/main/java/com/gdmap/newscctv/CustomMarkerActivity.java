@@ -5,13 +5,17 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
@@ -35,6 +39,10 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Text;
 import com.amap.api.maps.model.TextOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +77,8 @@ public class CustomMarkerActivity extends AppCompatActivity implements View.OnCl
     private Marker marker;
     private Marker growMarker;
     private LatLng latlng = new LatLng(36.061, 103.834);
+    private LatLng newlatlng = new LatLng(39.761, 116.434);
+    private Marker mMoveMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +150,7 @@ public class CustomMarkerActivity extends AppCompatActivity implements View.OnCl
                 .position(Const.CHENGDU).title("成都市")
                 .snippet("成都市:30.679879, 104.064855").icons(giflist)
                 .draggable(true).period(10);
+
         ArrayList<MarkerOptions> markerOptionsList = new ArrayList<>();
         markerOptionsList.add(optionsXiAn);
         markerOptionsList.add(markerOptionChengDu);
@@ -150,8 +161,44 @@ public class CustomMarkerActivity extends AppCompatActivity implements View.OnCl
         growMarker = mAmapControl.addMarker(new MarkerOptions().position(Const.ZHENGZHOU).icon(
                 BitmapDescriptorFactory.fromResource(
                         R.mipmap.ic_launcher_round)));
+
+        MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.location_marker))
+                .position(newlatlng)
+                .draggable(false);
+        mMoveMarker = mAmapControl.addMarker(markerOption);
+
+        initView(marker);
     }
 
+    public void initView(Marker marker){
+        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.marker_view, null);
+        ImageView iv_head = view.findViewById(R.id.iv_head);
+        Glide.with( getApplicationContext())
+                .load("https://imagepphcloud.thepaper.cn/pph/image/121/973/683.jpg")
+                .into(new CustomTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        iv_head.setImageDrawable(resource);
+                        Bitmap bitmap = getViewBitmap(view);
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+
+    }
+
+    public Bitmap getViewBitmap(View view) {
+        view.setDrawingCacheEnabled(true);
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED));
+        view.layout(0,0,view.getMeasuredWidth(),view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return Bitmap.createBitmap(view.getDrawingCache());
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

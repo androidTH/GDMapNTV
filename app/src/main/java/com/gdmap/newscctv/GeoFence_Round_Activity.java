@@ -42,7 +42,6 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolygonOptions;
-import com.amap.api.navi.view.AmapCameraOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;

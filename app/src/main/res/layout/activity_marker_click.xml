@@ -2,6 +2,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    <EditText
+        android:id="@+id/search_text"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="3dp"
+        android:background="@null"
+        android:hint="请输入关键词"
+        android:imeOptions="actionSearch"
+        android:longClickable="false"
+        android:singleLine="true"
+        android:textIsSelectable="false"
+        android:textSize="15sp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -18,6 +31,7 @@
             android:layout_gravity="top|right"
             android:background="#D000"
             android:orientation="vertical"
+            android:visibility="gone"
             android:padding="5dp" >
 
             <LinearLayout

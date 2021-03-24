@@ -1,10 +1,13 @@
 package com.gdmap.newscctv;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -30,6 +33,8 @@ public class ClusterActivity extends AppCompatActivity implements AMap.OnMapLoad
 
     @BindView(R.id.map)
     public MapView mapView;
+    @BindView(R.id.btn_empty)
+    public Button mBtnEmpty;
 
     private AMap aMap;
     private ClusterOverlay mClusterOverlay;
@@ -42,6 +47,13 @@ public class ClusterActivity extends AppCompatActivity implements AMap.OnMapLoad
         ButterKnife.bind(this);
         mapView.onCreate(savedInstanceState);
         setMapView();
+        mBtnEmpty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClusterActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setMapView(){
@@ -145,7 +157,7 @@ public class ClusterActivity extends AppCompatActivity implements AMap.OnMapLoad
         for(ClusterItem item : clusterItems){
             bounds.include(item.getPosition());
         }
-        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),0));
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),0));//设置地理显示范围 LatLngBounds与地图边缘10像素的填充区域
     }
 
     @Override

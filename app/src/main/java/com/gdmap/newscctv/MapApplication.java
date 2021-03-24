@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.ComponentCallbacks2;
 import android.content.res.Configuration;
 
-import com.amap.api.navi.AMapNavi;
-
 /**
  * Created by jinjiarui on 2017/9/29.
  */

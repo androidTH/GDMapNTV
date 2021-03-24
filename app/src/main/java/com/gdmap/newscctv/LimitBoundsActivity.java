@@ -42,17 +42,22 @@ public class LimitBoundsActivity extends AppCompatActivity implements AMap.OnMar
         }
         mapControl.addMarker(new MarkerOptions().position(southwestLatLng));
         mapControl.addMarker(new MarkerOptions().position(northeastLatLng));
-        mapControl.moveCamera(CameraUpdateFactory.zoomTo(8f));
+//        mapControl.moveCamera(CameraUpdateFactory.zoomTo(8f));
+        mapControl.animateCamera(CameraUpdateFactory.zoomTo(8f));
 
         buttonSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LatLngBounds bounds = new LatLngBounds(southwestLatLng, northeastLatLng);
-                mapControl.setMapStatusLimits(bounds);
+                LatLngBounds.Builder b = LatLngBounds.builder();
+                b.include(southwestLatLng);
+                b.include(northeastLatLng);
+//                LatLngBounds bounds = new LatLngBounds(southwestLatLng, northeastLatLng);
+                mapControl.setMapStatusLimits(b.build());
             }
         });
 
         mapControl.setOnMarkerClickListener(this);
+
     }
 
     @Override
